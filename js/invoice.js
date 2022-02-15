@@ -1,4 +1,4 @@
-// event handler with submit button
+// event handler added to  submit button
 document.getElementById('detail-submit-btn').addEventListener('click', function(){
     // access buyers details 
     const buyerDetails = document.getElementById('buyer-details-input');
@@ -10,7 +10,7 @@ document.getElementById('detail-submit-btn').addEventListener('click', function(
     buyerDetails.value = '';
 })
 
-// event handler with add button
+// event handler added to add button
 document.getElementById('add-details-btn').addEventListener('click', function(){
     // access input field
     const infoTable = document.getElementById('info-table');
@@ -31,11 +31,54 @@ document.getElementById('add-details-btn').addEventListener('click', function(){
     td2.innerText = itemQuantity.value;
     td3.innerText = Number(itemPrice.value) * Number(itemQuantity.value);
 
+
+    // add or generate class dynamically
+    td3.classList.add('items-total');
     // append elements : adoption
     tr.appendChild(th);
     tr.appendChild(td1);
     tr.appendChild(td2);
-    tr.appendChild(td3);
-    infoTable.appendChild(tr)
+    tr.appendChild(td3);  //<td class="items-total">820</td>
+    infoTable.appendChild(tr);
+
+    // call total calculation
+    totalCalculation();
+
+    // clean input field
+    itemName.value = '';
+    itemPrice.value = '';
+    itemQuantity.value = '';
 
 })
+
+// total calculation with function
+function totalCalculation(){
+    // call subTotal function
+    const subTotal = calculationSubTotal();
+    const subTotalToDisplay = document.getElementById('sub-total');
+    // asssign subTotal value to subtotal 
+    subTotalToDisplay.innerText = subTotal;
+    // tax calculation
+    const tax = subTotal * .2;
+    const taxToDisplay = document.getElementById('tax');
+    // assign tax value
+    taxToDisplay.innerText = tax.toFixed(2);
+    // grand total calculation
+    const grandTotal = document.getElementById('grand-total');
+    grandTotal.innerText = parseFloat(subTotalToDisplay.innerText) + parseFloat(taxToDisplay.innerText);
+    // total amount
+    const totalAmount = document.getElementById('grand-total-2');
+    totalAmount.innerText = grandTotal.innerText;
+}
+
+// sub-total calculation with function
+function calculationSubTotal(){
+    let subTotal = 0;
+    const cost = document.getElementsByClassName('items-total');
+    for(let i = 0; i < cost.length; i++){
+        const element = cost[i]; //<td class="items-total">820</td>
+        const price = parseInt(element.innerText);
+        subTotal = subTotal + price;
+    }
+    return subTotal;
+}
